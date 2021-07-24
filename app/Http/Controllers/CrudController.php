@@ -27,18 +27,26 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        try {
+            $tarea = new Tarea();
+            $tarea->description = $request->description;
+            $tarea->save();
+            return response()->json(['tarea' => $tarea], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['mensaje' => 'Ago salió mal', 'Error' => $th], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $tarea
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Tarea $tarea)
     {
-        //
+        return response()->json(['tarea:' => $tarea]);
     }
 
     /**
@@ -48,9 +56,15 @@ class CrudController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Tarea $tarea)
     {
-        //
+        try {
+            $tarea->description = $request->description;
+            $tarea->save();
+            return response()->json(['tarea' => $tarea]);
+        } catch (\Throwable $th) {
+            return response()->json(['mensaje' => 'Algo salió mal :(', 'Error' => $th], 500);
+        }
     }
 
     /**
@@ -59,8 +73,13 @@ class CrudController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Tarea $tarea)
     {
-        //
+        try {
+            $tarea->delete();   
+            return response()->json(['mensaje' => 'Eliminado satisfactoriamente']); 
+        } catch (\Throwable $th) {
+            return response()->json(['mensaje' => 'Algo salió mal :(', 'Error' => $th], 500);
+        }
     }
 }
